@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        
+        /* Animasi Slide */
+        .slide-enter { animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Animasi Sidebar Profil */
+        .sidebar-enter { animation: slideInRight 0.3s ease-out forwards; }
+        .sidebar-exit { animation: slideOutRight 0.3s ease-in forwards; }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes slideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+
+        /* Custom Scrollbar untuk Materi */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Style Quiz */
+        .quiz-option:hover { background-color: #FEF3C7; border-color: #F59E0B; }
+        .quiz-option.correct { background-color: #DCFCE7; border-color: #16A34A; color: #166534; }
+        .quiz-option.wrong { background-color: #FEE2E2; border-color: #DC2626; color: #991B1B; }
+        .hover-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        input:focus { outline: none; border-color: #FBBF24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3); }
+    </style>
+</head>
+<body class="bg-slate-100 h-screen overflow-hidden text-gray-800">
+
+    <div id="app-container" class="h-full w-full relative">
+
+        <button onclick="goToSlide('slide-menu')" id="home-btn" class="hidden absolute top-4 left-4 z-40 bg-white p-3 rounded-full shadow-lg hover:bg-yellow-400 transition font-bold text-sm border-2 border-gray-100">
+            🏠 Menu
+        </button>
+
+        <div id="slide-login" class="h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-indigo-800 p-6 text-white slide-enter">
+            <div class="max-w-md w-full bg-white text-gray-800 rounded-3xl shadow-2xl p-8 text-center border-t-8 border-yellow-400">
+                <div class="text-6xl mb-4">🎓</div>
+                <h1 class="text-3xl font-black mb-2 text-blue-900">ENGLISH APP</h1>
+                <p class="text-gray-500 mb-8">Masukkan Identitas Mahasiswa</p>
+                <div class="space-y-4 text-left">
+                    <input type="text" id="input-nama" placeholder="Nama Lengkap" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 font-bold text-gray-800">
+                    <input type="text" id="input-nim" placeholder="NIM" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 font-bold text-gray-800">
+                </div>
+                <button onclick="login()" class="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg transform hover:scale-105 transition">MASUK KELAS 🚀</button>
+            </div>
+        </div>
+
+        <div id="slide-menu" class="hidden h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-800 to-blue-600 p-6 text-white slide-enter relative overflow-hidden">
+            <button onclick="openSidebar()" class="absolute top-6 right-6 z-40 bg-white/20 backdrop-blur border border-white/30 p-3 rounded-full hover:bg-white/40 transition shadow-lg"><div class="text-2xl">👤</div></button>
+
+            <div id="sidebar-overlay" onclick="closeSidebar()" class="hidden absolute inset-0 bg-black/50 z-40 transition-opacity"></div>
+            <div id="profile-sidebar" class="hidden absolute top-0 right-0 h-full w-80 bg-white text-gray-800 shadow-2xl z-50 border-l-4 border-yellow-400 flex flex-col transform translate-x-full">
+                <div class="bg-blue-50 p-6 flex justify-between items-center border-b border-blue-100">
+                    <h3 class="font-bold text-lg text-blue-900">Identitas Saya</h3>
+                    <button onclick="closeSidebar()" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
+                </div>
+                <div class="p-8 flex-1 flex flex-col items-center text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-5xl mb-6 shadow-lg text-white border-4 border-white">🎓</div>
+                    <h2 id="sidebar-nama" class="text-xl font-black text-gray-800 break-words">...</h2>
+                    <p id="sidebar-nim" class="text-lg font-mono font-bold text-blue-600">...</p>
+                </div>
+                <div class="p-6 border-t border-gray-100"><button onclick="logout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 rounded-xl font-bold transition">🚪 Keluar</button></div>
+            </div>
+
+            <div class="text-center mb-6 mt-2">
+                <h1 class="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-md">ENGLISH MASTERY</h1>
+                <p class="text-sm md:text-lg opacity-90 text-blue-100">Modul Interaktif Kelompok 3</p>
+                <div class="mt-2 bg-white/10 px-4 py-1 rounded-full inline-block backdrop-blur border border-white/20 text-xs md:text-sm">Halo, <span id="menu-welcome-name" class="font-bold text-yellow-300">Mahasiswa</span>!</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl px-4 h-[60vh] overflow-y-auto custom-scrollbar">
+                
+                <div onclick="goToSlide('slide-bab1-menu')" class="bg-white text-blue-900 p-6 rounded-2xl shadow-xl cursor-pointer hover-card flex flex-col items-center justify-center text-center group min-h-[140px] border-b-4 border-blue-200">
+                    <div class="bg-blue-100 group-hover:bg-blue-200 transition p-3 rounded-full text-3xl mb-2">🎯</div>
+                    <h3 class="text-lg font-bold">Bab 1: The Formula</h3>
+                    <p class="text-xs text-gray-500 mt-1">SVO & Basic Tenses</p>
+                </div>
+
+                <div onclick="goToSlide('slide-6')" class="bg-white text-teal-900 p-6 rounded-2xl shadow-xl cursor-pointer hover-card flex flex-col items-center justify-center text-center group min-h-[140px] border-b-4 border-teal-200">
+                    <div class="bg-teal-100 group-hover:bg-teal-200 transition p-3 rounded-full text-3xl mb-2">⚡</div>
+                    <h3 class="text-lg font-bold">Bab 2: Auxiliary</h3>
+                    <p class="text-xs text-gray-500 mt-1">Do/Does & To Be</p>
+                </div>
+
+                <div onclick="goToSlide('slide-8')" class="bg-white text-pink-900 p-6 rounded-2xl shadow-xl cursor-pointer hover-card flex flex-col items-center justify-center text-center group min-h-[140px] border-b-4 border-pink-200">
+                    <div class="bg-pink-100 group-hover:bg-pink-200 transition p-3 rounded-full text-3xl mb-2">🔄</div>
+                    <h3 class="text-lg font-bold">Bab 3: Verbs</h3>
+                    <p class="text-xs text-gray-500 mt-1">V1, V2, V3 Changes</p>
+                </div>
+
+                <div onclick="goToSlide('slide-bab4-menu')" class="bg-white text-indigo-900 p-6 rounded-2xl shadow-xl cursor-pointer hover-card flex flex-col items-center justify-center text-center group min-h-[140px] border-b-4 border-indigo-200">
+                    <div class="bg-indigo-100 group-hover:bg-indigo-200 transition p-3 rounded-full text-3xl mb-2">🎥</div>
+                    <h3 class="text-lg font-bold">Bab 4: Continuous</h3>
+                    <p class="text-xs text-gray-500 mt-1">Sedang Berlangsung</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-bab1-menu" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-blue-50">
+            <div class="max-w-4xl w-full text-center">
+                <span class="bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">BAB 1</span>
+                <h2 class="text-4xl font-black text-blue-900 mb-8">Pilih Topik Pembelajaran</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="goToSlide('slide-svo-choice')" class="bg-white hover:bg-blue-600 hover:text-white text-blue-900 p-6 rounded-2xl shadow-lg border-b-4 border-blue-200 transition hover:-translate-y-1"><div class="text-3xl mb-2">🧩</div><h3 class="text-2xl font-bold">S - V - O</h3><p class="text-sm opacity-70">Struktur Dasar</p></button>
+                    <button onclick="goToSlide('slide-present-choice')" class="bg-white hover:bg-green-600 hover:text-white text-green-900 p-6 rounded-2xl shadow-lg border-b-4 border-green-200 transition hover:-translate-y-1"><div class="text-3xl mb-2">☀️</div><h3 class="text-2xl font-bold">Present Tense</h3><p class="text-sm opacity-70">Fakta & Kebiasaan</p></button>
+                    <button onclick="goToSlide('slide-past-choice')" class="bg-white hover:bg-orange-600 hover:text-white text-orange-900 p-6 rounded-2xl shadow-lg border-b-4 border-orange-200 transition hover:-translate-y-1"><div class="text-3xl mb-2">⏪</div><h3 class="text-2xl font-bold">Past Tense</h3><p class="text-sm opacity-70">Masa Lalu</p></button>
+                    <button onclick="goToSlide('slide-future-choice')" class="bg-white hover:bg-cyan-600 hover:text-white text-cyan-900 p-6 rounded-2xl shadow-lg border-b-4 border-cyan-200 transition hover:-translate-y-1"><div class="text-3xl mb-2">🚀</div><h3 class="text-2xl font-bold">Future Tense</h3><p class="text-sm opacity-70">Masa Depan</p></button>
+                </div>
+                <button onclick="goToSlide('slide-menu')" class="mt-10 text-gray-500 font-bold hover:text-blue-600 transition">← Kembali ke Menu Utama</button>
+            </div>
+        </div>
+        
+       <div id="slide-svo-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-blue-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-blue-600">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Topik: S - V - O</h2>
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-svo-1')" class="w-full bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                <button onclick="goToSlide('slide-bab1-menu')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-svo-1" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full">
+                <div>
+                    <span class="text-blue-600 font-bold text-xs tracking-widest uppercase">Materi 1 dari 5</span>
+                    <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Konsep Dasar & Pola</h2>
+                </div>
+                <button onclick="goToSlide('slide-svo-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto px-6 py-8 space-y-10 text-lg text-gray-700 leading-relaxed">
+                    
+                    <section>
+                        <p>
+                            Dalam bahasa Inggris, kalimat dasar disusun dengan pola <strong class="text-blue-700 bg-blue-50 px-2 rounded">SVO (Subject - Verb - Object)</strong>. 
+                            Artinya, Subjek melakukan aksi (Verb) terhadap Objek. Urutan ini penting, karena kalau dibalik, maknanya bisa rusak atau terdengar aneh.
+                        </p>
+                    </section>
+
+                    <hr class="border-gray-100">
+
+                    <section>
+                        <h3 class="font-bold text-2xl text-gray-900 mb-4">3 Pola Wajib Tahu</h3>
+                        <p class="mb-6">
+                            Tidak semua kalimat harus memiliki ketiganya, tetapi setiap kalimat <span class="font-bold text-red-600 underline decoration-2">wajib</span> memiliki Subject dan Verb.
+                        </p>
+                        
+                        <div class="space-y-8">
+                            
+                            <div class="bg-white border-l-4 border-green-500 pl-4 py-1">
+                                <h4 class="font-bold text-green-700 text-xl mb-2">1. Pola Subject + Verb (SV)</h4>
+                                <p class="text-base text-gray-600 mb-3">
+                                    Digunakan jika subject melakukan aksi yang <strong>tidak membutuhkan sasaran</strong>. Cukup Pelaku + Aksi.
+                                </p>
+                                <div class="bg-gray-50 p-4 rounded-xl space-y-2 font-mono text-base font-bold text-gray-800">
+                                    <div class="flex items-center gap-2">✅ <span>I sleep.</span> <span class="text-xs text-gray-400 font-sans font-normal">(Saya tidur)</span></div>
+                                    <div class="flex items-center gap-2">✅ <span>She runs.</span> <span class="text-xs text-gray-400 font-sans font-normal">(Dia berlari)</span></div>
+                                    <div class="flex items-center gap-2">✅ <span>They laugh.</span> <span class="text-xs text-gray-400 font-sans font-normal">(Mereka tertawa)</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border-l-4 border-blue-600 pl-4 py-1">
+                                <h4 class="font-bold text-blue-700 text-xl mb-2">2. Pola Subject + Verb + Object (SVO)</h4>
+                                <p class="text-base text-gray-600 mb-3">
+                                    Digunakan jika aksi <strong>membutuhkan sasaran</strong>. Object menjadi pihak yang menerima aksi tersebut.
+                                </p>
+                                <div class="bg-gray-50 p-4 rounded-xl space-y-2 font-mono text-base font-bold text-gray-800">
+                                    <div class="flex items-center gap-2">✅ <span>I eat <span class="text-blue-600">rice</span>.</span></div>
+                                    <div class="flex items-center gap-2">✅ <span>He watches <span class="text-blue-600">TV</span>.</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border-l-4 border-purple-500 pl-4 py-1">
+                                <h4 class="font-bold text-purple-700 text-xl mb-2">3. Pola Subject + To be + Complement</h4>
+                                <p class="text-base text-gray-600 mb-3">
+                                    Pada kalimat dengan <strong>verb to be</strong> (is/am/are), subject tidak melakukan aksi, tapi dijelaskan keadaannya/identitasnya. Tidak ada object, yang ada adalah <strong>Complement (Pelengkap)</strong>.
+                                </p>
+                                
+                                <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                                    <p class="font-bold text-purple-900 mb-3 text-sm uppercase tracking-wide">Jenis-jenis Complement:</p>
+                                    <ul class="space-y-4 text-base">
+                                        <li>
+                                            <span class="font-bold text-gray-800 block">🔹 Noun (Identitas)</span>
+                                            <span class="text-gray-600">Menjelaskan "Siapa" subjeknya.</span>
+                                            <div class="text-purple-700 font-mono text-sm mt-1">Ex: She is <strong class="underline">a student</strong>.</div>
+                                        </li>
+                                        <li>
+                                            <span class="font-bold text-gray-800 block">🔹 Adjective (Sifat/Kondisi)</span>
+                                            <span class="text-gray-600">Menjelaskan "Bagaimana" subjeknya.</span>
+                                            <div class="text-purple-700 font-mono text-sm mt-1">Ex: They are <strong class="underline">happy</strong>.</div>
+                                        </li>
+                                        <li>
+                                            <span class="font-bold text-gray-800 block">🔹 Adverb / Preposition (Keterangan)</span>
+                                            <span class="text-gray-600">Menjelaskan "Di mana/Kapan" subjeknya.</span>
+                                            <div class="text-purple-700 font-mono text-sm mt-1">Ex: He is <strong class="underline">in the room</strong>.</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-xl text-sm text-yellow-800 italic">
+                        *Catatan: Pola lain seperti SVOO atau SVC adalah materi lanjutan. Fokus kuasai 3 pola di atas dulu ya!
+                    </div>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex justify-between gap-4">
+                    <button onclick="goToSlide('slide-svo-choice')" class="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-gray-600 transition w-1/3">Kembali</button>
+                    <button onclick="goToSlide('slide-svo-2')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition w-2/3">Lanjut: Subject →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-svo-2" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full">
+                <div>
+                    <span class="text-blue-600 font-bold text-xs tracking-widest uppercase">Materi 2 dari 5</span>
+                    <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Bedah SUBJECT</h2>
+                </div>
+                <button onclick="goToSlide('slide-svo-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto px-6 py-8 space-y-10 text-lg text-gray-700 leading-relaxed">
+                    
+                    <section>
+                        <p>
+                            <strong class="text-blue-700">Subject</strong> adalah "Bos" dalam kalimat. Dia adalah topik pembicaraan atau pelaku tindakan. Identifikasi dengan pertanyaan <strong>"Siapa?"</strong> atau <strong>"Apa?"</strong>.
+                        </p>
+                    </section>
+
+                    <hr class="border-gray-100">
+
+                    <section>
+                        <h3 class="font-bold text-xl text-gray-900 mb-4">A. Kata Ganti (Subject Pronouns)</h3>
+                        <p class="mb-4 text-base text-gray-600">
+                            Bahasa Inggris butuh subject di setiap kalimat. Agar tidak capek mengulang nama (misal: "Budi makan, Budi minum"), kita pakai <strong>Pronouns</strong>:
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base">
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">I (Saya)</span>
+                                <span class="text-sm text-gray-600">Digunakan untuk diri sendiri.</span>
+                                <span class="text-sm text-gray-500">"I am a student."</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">You (Kamu/Kalian)</span>
+                                <span class="text-sm text-gray-500">Orang yang diajak bicara.</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">He (Dia Laki-laki)</span>
+                                <span class="text-sm text-gray-500">Pengganti satu orang laki-laki.</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">She (Dia Perempuan)</span>
+                                <span class="text-sm text-gray-500">Pengganti satu orang perempuan.</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">It (Dia Benda)</span>
+                                <span class="text-sm text-gray-500">Untuk benda, hewan, atau situasi.</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">We (Kami/Kita)</span>
+                                <span class="text-sm text-gray-500">Saya + Orang lain (Jamak).</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-100">
+                                <span class="font-bold text-gray-800 block mb-1">They (Mereka)</span>
+                                <span class="text-sm text-gray-500">Lebih dari satu orang/benda.</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <hr class="border-gray-100">
+
+                    <section>
+                        <h3 class="font-bold text-xl text-gray-900 mb-4">B. Variasi Bentuk Subject</h3>
+                        <p class="mb-4 text-base text-gray-600">Subject tidak hanya "I" atau "You", tapi bisa juga berupa:</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="flex-none w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl">👤</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-base">Kata Benda (Noun)</h4>
+                                    <p class="text-sm text-gray-600">Nama orang, tempat, atau benda mati.</p>
+                                    <p class="text-sm font-mono text-orange-600 mt-1">Andi, Sarah, School, Table.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <div class="flex-none w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-xl">🔗</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-base">Frasa (Noun Phrase)</h4>
+                                    <p class="text-sm text-gray-600">Gabungan kata yang dianggap satu kesatuan.</p>
+                                    <p class="text-sm font-mono text-purple-600 mt-1">"The big house", "My best friend".</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex-none w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-xl">🏊</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-base">Gerund (V-ing)</h4>
+                                    <p class="text-sm text-gray-600">Kata kerja yang dibendakan (Aktivitas).</p>
+                                    <p class="text-sm font-mono text-green-600 mt-1">"Swimming is healthy", "Reading is fun".</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-yellow-50 p-6 rounded-xl border border-yellow-200">
+                        <h3 class="font-bold text-yellow-900 text-lg mb-4 flex items-center gap-2">
+                            <span>⚠️</span> Subject Khusus
+                        </h3>
+                        <p class="text-sm text-yellow-900 mb-4">
+                            Ada kata-kata khusus yang juga berfungsi sebagai subject, meskipun bukan nama orang atau benda biasa:
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-yellow-100">
+                                <p class="font-bold text-gray-800 text-base">1. There (Keberadaan)</p>
+                                <p class="text-sm text-gray-600">Digunakan untuk menyatakan "Ada".</p>
+                                <p class="text-sm font-mono text-yellow-700 mt-1">"<strong>There</strong> is a cat." (Ada seekor kucing)</p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-yellow-100">
+                                <p class="font-bold text-gray-800 text-base">2. This / That (Penunjuk)</p>
+                                <p class="text-sm text-gray-600">Ini atau Itu.</p>
+                                <p class="text-sm font-mono text-yellow-700 mt-1">"<strong>This</strong> is my book." (Ini bukuku)</p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-yellow-100">
+                                <p class="font-bold text-gray-800 text-base">3. Someone / Everyone (Tak Tentu)</p>
+                                <p class="text-sm text-gray-600">Seseorang atau Semua orang.</p>
+                                <p class="text-sm font-mono text-yellow-700 mt-1">"<strong>Everyone</strong> likes pizza." (Semua orang suka pizza)</p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-yellow-100">
+                                <p class="font-bold text-gray-800 text-base">4. Nothing / Nobody (Negatif)</p>
+                                <p class="text-sm text-gray-600">Tidak ada apa-apa/siapa-siapa.</p>
+                                <p class="text-sm font-mono text-yellow-700 mt-1">"<strong>Nobody</strong> knows." (Tak ada yang tahu)</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex justify-between gap-4">
+                    <button onclick="goToSlide('slide-svo-1')" class="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-gray-600 transition w-1/3">← Mundur</button>
+                    <button onclick="goToSlide('slide-svo-3')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition w-2/3">Lanjut: Verb →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-svo-3" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full">
+                <div>
+                    <span class="text-blue-600 font-bold text-xs tracking-widest uppercase">Materi 3 dari 5</span>
+                    <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Bedah VERB</h2>
+                </div>
+                <button onclick="goToSlide('slide-svo-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto px-6 py-8 space-y-10 text-lg text-gray-700 leading-relaxed">
+                    
+                    <section>
+                        <p>
+                            <strong class="text-purple-700">Verb</strong> (Kata Kerja) menunjukkan aksi, aktivitas, keadaan, atau proses yang dilakukan oleh subject. Ini adalah <strong>inti kalimat</strong>; tanpa verb, kalimat tidak dianggap lengkap.
+                        </p>
+                    </section>
+
+                    <section>
+                        <p>
+                            Dalam bahasa Inggris, verb menentukan <strong>apa yang terjadi dalam kalimat</strong>. Verb memberi tahu apakah subject sedang melakukan sesuatu, merasakan sesuatu, memiliki sesuatu, atau berada dalam suatu kondisi tertentu. 
+                            Karena itu, pemilihan verb sangat memengaruhi makna kalimat secara keseluruhan.
+                        </p>
+                        <p class="mt-2">
+                            Beberapa verb menunjukkan <strong>aksi yang bisa dilihat atau dibayangkan</strong>, sementara yang lain menunjukkan <strong>keadaan batin, pikiran, atau kepemilikan</strong>. Perbedaan inilah yang membuat verb dibagi menjadi beberapa jenis, seperti action verb dan state verb.
+                        </p>
+                    </section>
+
+
+                    <hr class="border-gray-100">
+
+                    <section>
+                        <h3 class="font-bold text-xl text-gray-900 mb-6">Jenis-Jenis Verb</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                                    <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded uppercase">1</span> 
+                                    Verb Tindakan (Action Verb)
+                                </h4>
+                                <p class="text-base text-gray-600 mt-1">Menunjukkan aktivitas fisik atau mental.</p>
+                                <div class="mt-2 bg-gray-50 p-3 rounded-lg border-l-4 border-purple-500 font-mono text-base text-gray-800">
+                                    eat, drink, study, watch, read, write
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1 italic">Contoh kalimatnya:
+                                    <ul class="list-disc ml-5 mt-1">
+                                        <li>She <strong class="text-purple-700">eats</strong> breakfast every morning.</li>
+                                        <li>He <strong class="text-purple-700">drinks</strong> water after exercise.</li>
+                                        <li>She <strong class="text-purple-700">studies</strong> English.</li>
+                                        <li>They <strong class="text-purple-700">watch</strong> movies at night.</li>
+                                        <li>I <strong class="text-purple-700">read</strong> books before sleeping.</li>
+                                        <li>We <strong class="text-purple-700">write</strong> notes in class.</li>
+                                    </ul>
+                                </div>
+ 
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                                    <span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded uppercase">2</span> 
+                                    Verb Keadaan (State Verb)
+                                </h4>
+                                <p class="text-base text-gray-600 mt-1">Menunjukkan kondisi, perasaan, kepemilikan, atau pikiran.</p>
+                                <div class="mt-2 bg-gray-50 p-3 rounded-lg border-l-4 border-purple-400 font-mono text-base text-gray-800">
+                                    like, love, know, have, need, believe
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1 italic">Contoh kalimatnya:
+                                    <ul class="list-disc ml-5 mt-1">
+                                        <li>I <strong class="text-purple-700">like</strong> coffee.</li>
+                                        <li>She <strong class="text-purple-700">loves</strong> her family.</li>
+                                        <li>They <strong class="text-purple-700">know</strong> the answer.</li>
+                                        <li>He <strong class="text-purple-700">has</strong> a new phone.</li>
+                                        <li>We <strong class="text-purple-700">need</strong> more time.</li>
+                                        <li>I <strong class="text-purple-700">believe</strong> you.</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex justify-between gap-4">
+                    <button onclick="goToSlide('slide-svo-2')" class="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-gray-600 transition w-1/3">← Mundur</button>
+                    <button onclick="goToSlide('slide-svo-4')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition w-2/3">Lanjut: Object →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-svo-4" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full">
+                <div>
+                    <span class="text-blue-600 font-bold text-xs tracking-widest uppercase">Materi 4 dari 5</span>
+                    <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Bedah OBJECT</h2>
+                </div>
+                <button onclick="goToSlide('slide-svo-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto px-6 py-8 space-y-10 text-lg text-gray-700 leading-relaxed">
+                    
+                    <section>
+                        <p>
+                            <strong class="text-pink-600">Object</strong> adalah sasaran dari verb. Muncul setelah verb dan menjawab pertanyaan <strong>"Apa?"</strong> atau <strong>"Siapa?"</strong> yang terkena tindakan subject.
+                        </p>
+                        <div class="bg-yellow-50 p-4 rounded-xl text-base text-yellow-900 mt-4 border border-yellow-200">
+                            <strong>Ingat:</strong> Tidak semua kalimat punya objek. Objek hanya wajib ada jika verb-nya membutuhkan target (Transitive).
+                        </div>
+                    </section>
+
+                    <hr class="border-gray-100">
+
+                    <section>
+                        <h3 class="font-bold text-xl text-gray-900 mb-4">A. Jenis Objek</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800 text-base mb-1">1. Direct Object (Langsung)</h4>
+                                <p class="text-sm text-gray-600 mb-2">Langsung menerima aksi.</p>
+                                <p class="text-sm font-mono text-pink-600">"I eat <strong>rice</strong>."</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800 text-base mb-1">2. Indirect Object (Tak Langsung)</h4>
+                                <p class="text-sm text-gray-600 mb-2">Menerima manfaat aksi (biasanya orang).</p>
+                                <p class="text-sm font-mono text-pink-600">"I give <strong>her</strong> a gift."</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="font-bold text-xl text-gray-900 mb-4">B. Bentuk-Bentuk Object</h3>
+                        <div class="space-y-4 text-base">
+                            
+                            <div>
+                                <h4 class="font-bold text-gray-800">1. Kata Benda & Frasa</h4>
+                                <ul class="list-disc pl-5 text-gray-600 mt-1 space-y-1">
+                                    <li>Benda: book, phone, money.</li>
+                                    <li>Orang: teacher, friend, Sarah.</li>
+                                    <li>Frasa: "a new phone", "my best friend".</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-2">2. Kata Ganti Objek (Object Pronouns)</h4>
+                                <p class="text-gray-600 mb-3 text-sm">Digunakan agar tidak mengulang nama subject. Perhatikan perubahannya:</p>
+                                
+                                <div class="grid grid-cols-2 gap-3 text-base">
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">I</span> ➜ <span class="font-bold text-pink-700">Me</span>
+                                    </div>
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">You</span> ➜ <span class="font-bold text-pink-700">You</span>
+                                    </div>
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">He</span> ➜ <span class="font-bold text-pink-700">Him</span>
+                                    </div>
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">She</span> ➜ <span class="font-bold text-pink-700">Her</span>
+                                    </div>
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">We</span> ➜ <span class="font-bold text-pink-700">Us</span>
+                                    </div>
+                                    <div class="flex justify-between bg-pink-50 p-2 px-4 rounded-lg">
+                                        <span class="text-gray-500">They</span> ➜ <span class="font-bold text-pink-700">Them</span>
+                                    </div>
+                                </div>
+                                <p class="mt-3 text-sm italic text-gray-500">Contoh: "She likes <strong>him</strong>." (Bukan "She likes he")</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex justify-between gap-4">
+                    <button onclick="goToSlide('slide-svo-3')" class="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-gray-600 transition w-1/3">← Mundur</button>
+                    <button onclick="goToSlide('slide-svo-5')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition w-2/3">Lanjut: Studi Kasus →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-svo-5" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full">
+                <div>
+                    <span class="text-blue-600 font-bold text-xs tracking-widest uppercase">Materi 5 dari 5</span>
+                    <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Studi Kasus</h2>
+                </div>
+                <button onclick="goToSlide('slide-svo-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto px-6 py-8 space-y-10 text-lg text-gray-700 leading-relaxed">
+                    
+                    <section class="text-center">
+                        <h3 class="text-2xl font-black text-gray-900 mb-2">Kenapa Urutan Penting?</h3>
+                        <p class="text-gray-600">
+                            Bahasa Inggris memiliki aturan <strong>"Strict Word Order"</strong>. Siapa yang di depan adalah Pelaku, siapa yang di belakang adalah Korban.
+                        </p>
+                    </section>
+
+                    <section>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-green-50 p-6 rounded-2xl border border-green-200 shadow-sm">
+                                <h4 class="font-bold text-green-800 text-lg mb-2">1. The Cat Chased The Mouse</h4>
+                                <ul class="text-sm space-y-2 text-green-900 mb-4">
+                                    <li>👤 <strong>Subject:</strong> The cat (Kucing)</li>
+                                    <li>⚙️ <strong>Verb:</strong> Chased (Mengejar)</li>
+                                    <li>📦 <strong>Object:</strong> The mouse (Tikus)</li>
+                                </ul>
+                                <div class="bg-white p-3 rounded-lg text-center font-bold text-green-700 shadow-sm border border-green-100">
+                                    Arti: Kucing mengejar tikus (Normal) ✅
+                                </div>
+                            </div>
+
+                            <div class="bg-red-50 p-6 rounded-2xl border border-red-200 shadow-sm">
+                                <h4 class="font-bold text-red-800 text-lg mb-2">2. The Mouse Chased The Cat</h4>
+                                <ul class="text-sm space-y-2 text-red-900 mb-4">
+                                    <li>👤 <strong>Subject:</strong> The mouse (Tikus)</li>
+                                    <li>⚙️ <strong>Verb:</strong> Chased (Mengejar)</li>
+                                    <li>📦 <strong>Object:</strong> The cat (Kucing)</li>
+                                </ul>
+                                <div class="bg-white p-3 rounded-lg text-center font-bold text-red-700 shadow-sm border border-red-100">
+                                    Arti: Tikus mengejar kucing (Horor/Terbalik) ❌
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-blue-50 p-6 rounded-2xl text-center border border-blue-100">
+                        <h3 class="font-bold text-blue-900 text-xl mb-2">Kesimpulan</h3>
+                        <p class="text-blue-800">
+                            Hanya dengan menukar posisi S dan O, Anda mengubah sejarah siapa yang melakukan dan siapa yang kena. Inilah kenapa urutan dalam bahasa Inggris itu "ribet tapi konsisten".
+                        </p>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex justify-between gap-4">
+                    <button onclick="goToSlide('slide-svo-4')" class="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-bold text-gray-600 transition w-1/3">← Mundur</button>
+                    <button onclick="goToSlide('slide-svo-choice')" class="mt-6 text-gray-400 font-bold text-sm">Kembali</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-present-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-green-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-green-600">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Topik: Present Tense</h2>
+                <p class="text-gray-500 mb-8">The Daily Truth</p>
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-present-materi')" class="w-full bg-green-100 hover:bg-green-200 text-green-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                <button onclick="goToSlide('slide-bab1-menu')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-present-materi" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-yellow-100 p-2 rounded-full text-2xl">☀️</div>
+                    <div>
+                        <span class="text-yellow-600 font-bold text-xs tracking-widest uppercase">The Daily Truth</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Present Tense</h2>
+                    </div>
+                </div>
+                <button onclick="goToSlide('slide-present-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+                            <span>🤔</span> Kapan Kita Pakai Ini?
+                        </h3>
+                        <p class="mb-4">
+                            Banyak yang mengira Present Tense itu cuma untuk "Detik Ini". <strong>Salah!</strong> 
+                            Present Tense adalah tenses untuk menceritakan <strong>KEBENARAN</strong>.
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <strong class="text-blue-800 block mb-1">1. Fakta Abadi (General Truth)</strong>
+                                <p class="text-sm">Matahari terbit dari timur, Api itu panas, Jakarta adalah ibukota.</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                                <strong class="text-green-800 block mb-1">2. Kebiasaan (Habit)</strong>
+                                <p class="text-sm">Saya bangun jam 5, Budi suka kopi, Kami kuliah setiap Senin.</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center font-bold text-gray-800 bg-gray-100 p-3 rounded-lg">
+                            Kuncinya: Kalau itu Fakta atau Rutinitas = WAJIB Present Tense.
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Rumus & Pembagian Kubu</h3>
+                        <div class="text-center mb-6">
+                            <span class="bg-white px-6 py-3 rounded-xl shadow-md border border-gray-200 font-black text-2xl tracking-wide text-blue-600">
+                                S + V1 + O
+                            </span>
+                        </div>
+                        <p class="mb-4">Masalah utama di sini adalah <strong>SUBJECT</strong> (Pelaku) terpecah menjadi dua kubu:</p>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-green-500 relative overflow-hidden">
+                                <div class="absolute -right-4 -top-4 bg-green-100 w-20 h-20 rounded-full"></div>
+                                <h4 class="font-black text-xl text-green-700 relative z-10">😎 TIM SANTAI</h4>
+                                <p class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider relative z-10">I, You, We, They</p>
+                                <p class="text-sm mb-4 relative z-10">Mereka orangnya santai. Kata kerjanya <strong>POLOS</strong> saja. Jangan ditambah apa-apa.</p>
+                                <ul class="space-y-2 font-mono text-sm font-bold text-green-800 relative z-10">
+                                    <li>✅ I eat apple.</li>
+                                    <li>✅ They play football.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-orange-500 relative overflow-hidden">
+                                <div class="absolute -right-4 -top-4 bg-orange-100 w-20 h-20 rounded-full"></div>
+                                <h4 class="font-black text-xl text-orange-700 relative z-10">👑 TIM MANJA</h4>
+                                <p class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-wider relative z-10">She, He, It, Nama Orang</p>
+                                <p class="text-sm mb-4 relative z-10">Mereka ini "Manja". Tidak mau sendirian. Kata kerjanya minta ditemani huruf <strong>"s" / "es"</strong>.</p>
+                                <ul class="space-y-2 font-mono text-sm font-bold text-orange-800 relative z-10">
+                                    <li>✅ She eat<span class="bg-orange-200 px-1 rounded">s</span> apple.</li>
+                                    <li>✅ Budi play<span class="bg-orange-200 px-1 rounded">s</span> football.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-orange-600 mb-4">Cara Memanjakan Subject Tunggal (She/He/It)</h3>
+                        <p class="mb-4 text-sm">Khusus Tim Manja, kapan pakai <strong>-s</strong> dan kapan <strong>-es</strong>?</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-gray-100 font-bold px-3 py-1 rounded text-gray-600">1</div>
+                                <div>
+                                    <strong class="block text-gray-800">Aturan Umum (+s)</strong>
+                                    <span class="text-sm text-gray-500">Kebanyakan kata kerja cukup tambah s.</span>
+                                    <div class="font-mono text-sm mt-1 text-orange-600">Sleeps, Runs, Writes.</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-gray-100 font-bold px-3 py-1 rounded text-gray-600">2</div>
+                                <div>
+                                    <strong class="block text-gray-800">Bunyi Desis/Angin (+es)</strong>
+                                    <span class="text-sm text-gray-500">Akhiran -o, -ch, -sh, -x, -ss. Biar enak dibaca.</span>
+                                    <div class="font-mono text-sm mt-1 text-orange-600">Goes, Watches, Washes, Fixes.</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-gray-100 font-bold px-3 py-1 rounded text-gray-600">3</div>
+                                <div>
+                                    <strong class="block text-gray-800">Aturan Huruf "Y"</strong>
+                                    <span class="text-sm text-gray-500">Sebelum Y huruf mati: Study -> Studies.</span><br>
+                                    <span class="text-sm text-gray-500">Sebelum Y huruf vokal: Play -> Plays.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-red-600 mb-4">Saying "NO" (Kalimat Negatif)</h3>
+                        <div class="bg-red-50 p-5 rounded-2xl border border-red-100 mb-6">
+                            <p class="font-bold text-red-800 mb-2">⛔ Masalah:</p>
+                            <p class="text-sm text-red-900">Kita tidak boleh bilang "I no like coffee". Itu bahasa Tarzan. Kita butuh bantuan <strong>Do / Does</strong>.</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-white p-4 rounded-xl border border-gray-200">
+                                <strong class="text-green-700">Tim Santai (I/You/We/They)</strong>
+                                <p class="text-sm mt-1">Pakai <strong>DO NOT (Don't)</strong></p>
+                                <p class="font-mono text-sm font-bold mt-2">"I don't like coffee."</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200">
+                                <strong class="text-orange-700">Tim Manja (She/He/It)</strong>
+                                <p class="text-sm mt-1">Pakai <strong>DOES NOT (Doesn't)</strong></p>
+                                <p class="font-mono text-sm font-bold mt-2">"She doesn't like coffee."</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-100 p-6 rounded-2xl border-2 border-yellow-400 relative">
+                            <div class="absolute -top-3 -left-3 text-3xl">🧹</div>
+                            <h4 class="font-black text-yellow-900 mb-2 pl-4">ATURAN VACUUM CLEANER</h4>
+                            <p class="text-sm text-yellow-900 mb-3">
+                                Perhatikan! Saat kata <strong>DOES</strong> muncul, huruf "s" di kata kerja <strong>HILANG</strong> (Disedot oleh Does).
+                            </p>
+                            <div class="bg-white p-3 rounded-lg space-y-2 text-sm">
+                                <p class="text-red-500">❌ Salah: She doesn't <span class="underline decoration-wavy">eats</span>. (Double S)</p>
+                                <p class="text-green-600 font-bold">✅ Benar: She doesn't eat.</p>
+                                <p class="text-xs text-gray-400 italic">(Huruf 's' sudah pindah ke Doe<strong class="text-black">s</strong>)</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-purple-700 mb-4">Bertanya (Question)</h3>
+                        <p class="mb-4">Triknya simpel: Pindahkan <strong>Do / Does</strong> ke paling depan.</p>
+                        <div class="space-y-4">
+                            <div class="bg-purple-50 p-4 rounded-xl">
+                                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Tim Santai</p>
+                                <p>You play game. <span class="text-gray-400">➜</span> <strong>Do</strong> you play game?</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-xl">
+                                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Tim Manja</p>
+                                <p>She loves you. <span class="text-gray-400">➜</span> <strong>Does</strong> she love you?</p>
+                                <p class="text-xs text-purple-700 mt-1 italic">*Ingat aturan Vacuum Cleaner! 'Loves' jadi 'Love'.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">🕵️ Kode Rahasia (Time Signal)</h3>
+                        <p class="mb-4 text-sm text-gray-600">Kalau kamu lihat kata-kata ini, 99% jawabannya pasti Present Tense:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Every day</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Always</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Usually</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Often</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Sometimes</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm font-bold text-gray-700">Never</span>
+                        </div>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-present-choice')" class="w-full px-6 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-past-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-orange-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-orange-500">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Topik: Past Tense</h2>
+                <p class="text-gray-500 mb-8">The History Book</p>
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-past-materi')" class="w-full bg-orange-100 hover:bg-orange-200 text-orange-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                <button onclick="goToSlide('slide-bab1-menu')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-past-materi" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-orange-100 p-2 rounded-full text-2xl">⏪</div>
+                    <div>
+                        <span class="text-orange-600 font-bold text-xs tracking-widest uppercase">The History Book</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Simple Past Tense</h2>
+                    </div>
+                </div>
+                <button onclick="goToSlide('slide-past-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-orange-900 mb-4 border-l-4 border-orange-500 pl-3">Apa itu Past Tense?</h3>
+                        <p class="mb-4">
+                            Jika Present Tense membahas "Fakta Abadi", maka Past Tense adalah mesin waktu. Tenses ini digunakan untuk membicarakan kejadian yang <strong>DIMULAI</strong> dan <strong>BERAKHIR</strong> di masa lalu.
+                        </p>
+                        <div class="bg-orange-50 p-5 rounded-2xl border border-orange-100 text-center">
+                            <strong class="text-orange-800 block mb-2 text-lg">Kuncinya: "SUDAH LEWAT"</strong>
+                            <p class="text-sm text-gray-600">Kejadiannya sudah selesai, tidak ada hubungannya dengan sekarang.</p>
+                            <div class="mt-3 flex justify-center gap-4 text-xs font-bold text-white">
+                                <span class="bg-gray-400 px-3 py-1 rounded">Saya makan (kemarin)</span>
+                                <span class="bg-gray-400 px-3 py-1 rounded">Dia pergi (tadi pagi)</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Rumus Kalimat Verbal</h3>
+                        <p class="mb-4">
+                            Berbeda dengan Present Tense yang membedakan "Tim Santai" dan "Tim Manja", di Past Tense <strong>SEMUA SUBJECT DIPERLAKUKAN SAMA</strong>. Adil, bukan?
+                        </p>
+                        
+                        <div class="text-center mb-8">
+                            <span class="bg-white px-8 py-4 rounded-xl shadow-lg border-2 border-orange-200 font-black text-3xl tracking-wide text-orange-600">
+                                S + Verb 2
+                            </span>
+                        </div>
+
+                        <div class="space-y-6">
+                            <h4 class="font-bold text-lg text-gray-800">Tantangan Terbesar: Perubahan Kata Kerja</h4>
+                            <p class="text-sm text-gray-600">Kata kerja (Verb) harus berubah menjadi bentuk masa lalu (V2). Ada dua jenis perubahan:</p>
+
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
+                                <strong class="text-blue-800 text-lg">1. Regular Verbs (Si Anak Patuh)</strong>
+                                <p class="text-sm text-gray-600 mb-3">Aturannya mudah: Cukup tambahkan akhiran <strong>-ed</strong> atau <strong>-d</strong>.</p>
+                                <div class="grid grid-cols-2 gap-4 font-mono text-sm">
+                                    <div class="bg-blue-50 p-2 rounded">Play ➜ Play<strong>ed</strong></div>
+                                    <div class="bg-blue-50 p-2 rounded">Watch ➜ Watch<strong>ed</strong></div>
+                                    <div class="bg-blue-50 p-2 rounded">Cook ➜ Cook<strong>ed</strong></div>
+                                    <div class="bg-blue-50 p-2 rounded">Live ➜ Live<strong>d</strong></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-red-500 shadow-sm">
+                                <strong class="text-red-800 text-lg">2. Irregular Verbs (Si Pemberontak)</strong>
+                                <p class="text-sm text-gray-600 mb-3">Mereka tidak punya aturan. Bentuknya berubah total dan <strong>WAJIB DIHAFAL</strong>.</p>
+                                <div class="grid grid-cols-2 gap-4 font-mono text-sm">
+                                    <div class="bg-red-50 p-2 rounded">Go ➜ <strong class="text-red-700">Went</strong></div>
+                                    <div class="bg-red-50 p-2 rounded">Eat ➜ <strong class="text-red-700">Ate</strong></div>
+                                    <div class="bg-red-50 p-2 rounded">Drink ➜ <strong class="text-red-700">Drank</strong></div>
+                                    <div class="bg-red-50 p-2 rounded">Sleep ➜ <strong class="text-red-700">Slept</strong></div>
+                                    <div class="bg-red-50 p-2 rounded">Buy ➜ <strong class="text-red-700">Bought</strong></div>
+                                    <div class="bg-red-50 p-2 rounded">See ➜ <strong class="text-red-700">Saw</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <hr class="border-gray-200">
+
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-purple-800 mb-4">Nominal Sentence (Was / Were)</h3>
+                        <p class="mb-4">
+                            Jika kalimat tidak punya kata kerja aksi (seperti: "Saya dulu kurus", "Mereka kemarin ada di sini"), kita gunakan <strong>To Be Lampau</strong>.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <strong class="text-purple-900 text-lg">WAS</strong>
+                                    <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full font-bold">Tunggal + I</span>
+                                </div>
+                                <ul class="text-sm space-y-1 text-purple-800 font-medium">
+                                    <li>• I was</li>
+                                    <li>• She was</li>
+                                    <li>• He was</li>
+                                    <li>• It was</li>
+                                </ul>
+                                <p class="mt-3 text-xs italic text-gray-500">"I was happy." (Dulu saya bahagia)</p>
+                            </div>
+
+                            <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <strong class="text-purple-900 text-lg">WERE</strong>
+                                    <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full font-bold">Jamak</span>
+                                </div>
+                                <ul class="text-sm space-y-1 text-purple-800 font-medium">
+                                    <li>• You were</li>
+                                    <li>• We were</li>
+                                    <li>• They were</li>
+                                </ul>
+                                <p class="mt-3 text-xs italic text-gray-500">"They were here." (Kemarin mereka di sini)</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Kalimat Negatif & Tanya</h3>
+                        <div class="bg-yellow-100 p-6 rounded-2xl border-2 border-yellow-400 relative mb-6">
+                            <div class="absolute -top-3 -left-3 text-3xl">🧹</div>
+                            <h4 class="font-black text-yellow-900 mb-2 pl-4">THE VACUUM CLEANER: DID</h4>
+                            <p class="text-sm text-yellow-900 mb-3">
+                                Aturan ini mirip dengan Present Tense. Jika kata <strong>DID</strong> muncul (untuk Negatif atau Tanya), maka Verb 2 "disedot" kembali menjadi <strong>Verb 1 (Polos)</strong>.
+                            </p>
+                            <div class="bg-white p-3 rounded-lg space-y-2 text-sm font-bold text-center">
+                                Did + V1 <span class="text-gray-400 font-normal">(Bukan V2)</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border border-red-200">
+                                <strong class="text-red-700 block mb-1">⛔ Kalimat Negatif (Did Not / Didn't)</strong>
+                                <p class="text-sm text-gray-600 mb-2">Semua subject pakai Didn't.</p>
+                                <div class="bg-red-50 p-3 rounded font-mono text-sm">
+                                    <p class="mb-1 text-red-800">✅ She <strong>didn't eat</strong> pizza.</p>
+                                    <p class="text-gray-400 line-through">❌ She didn't ate pizza.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-blue-200">
+                                <strong class="text-blue-700 block mb-1">❓ Kalimat Tanya (Interrogative)</strong>
+                                <p class="text-sm text-gray-600 mb-2">Pindahkan Did ke depan.</p>
+                                <div class="bg-blue-50 p-3 rounded font-mono text-sm">
+                                    <p class="mb-1 text-blue-800">✅ <strong>Did</strong> you <strong>go</strong> to Bali?</p>
+                                    <p class="text-gray-400 line-through">❌ Did you went to Bali?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <hr class="border-gray-200">
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">⏳ Sinyal Waktu (Time Signal)</h3>
+                        <p class="mb-4 text-sm text-gray-600">Past Tense selalu spesifik soal waktu lampau. Hafalkan kata-kata ini:</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="bg-gray-100 p-3 rounded-xl font-bold text-gray-700">
+                                Yesterday<br><span class="text-xs font-normal text-gray-500">(Kemarin)</span>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-xl font-bold text-gray-700">
+                                Last ...<br><span class="text-xs font-normal text-gray-500">(Last week, Last year)</span>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-xl font-bold text-gray-700">
+                                ... Ago<br><span class="text-xs font-normal text-gray-500">(2 days ago, A week ago)</span>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-xl font-bold text-gray-700">
+                                In 1998<br><span class="text-xs font-normal text-gray-500">(Tahun lampau)</span>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-xl font-bold text-gray-700">
+                                This morning<br><span class="text-xs font-normal text-gray-500">(Tadi pagi - jika sudah lewat)</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-orange-50 p-6 rounded-2xl text-center border border-orange-100">
+                        <h3 class="font-bold text-orange-900 text-xl mb-2">Kesimpulan</h3>
+                        <p class="text-orange-800 text-sm">
+                            Past Tense itu simpel karena semua subject sama (V2/Did). Tantangannya cuma satu: <strong>Menghafal Irregular Verbs</strong>.
+                        </p>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-past-choice')" class="w-full px-6 py-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-future-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-cyan-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-cyan-500">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Topik: Future Tense</h2>
+                <p class="text-gray-500 mb-8">The Crystal Ball</p>
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-future-materi')" class="w-full bg-cyan-100 hover:bg-cyan-200 text-cyan-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                <button onclick="goToSlide('slide-bab1-menu')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-future-materi" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-cyan-100 p-2 rounded-full text-2xl">🔮</div>
+                    <div>
+                        <span class="text-cyan-600 font-bold text-xs tracking-widest uppercase">The Crystal Ball</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Simple Future Tense</h2>
+                    </div>
+                </div>
+                <button onclick="goToSlide('slide-future-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-cyan-900 mb-4 border-l-4 border-cyan-500 pl-3">Melihat Masa Depan</h3>
+                        <p class="mb-4">
+                            Future Tense digunakan untuk membicarakan sesuatu yang <strong>BELUM TERJADI</strong>. Ini adalah tentang rencana, prediksi, janji, atau keputusan spontan untuk masa depan.
+                        </p>
+                        <div class="bg-cyan-50 p-4 rounded-xl text-center border border-cyan-200">
+                            <strong class="text-cyan-800 text-lg">Kuncinya: "AKAN"</strong>
+                            <p class="text-sm text-gray-600 mt-1">Apapun yang terjadi semenit lagi, besok, atau tahun depan.</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">⚔️ Pertarungan: WILL vs BE GOING TO</h3>
+                        <p class="mb-6 text-sm text-gray-600 text-center">Sama-sama berarti "Akan", tapi penggunaannya beda total!</p>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-blue-500 relative">
+                                <h4 class="font-black text-xl text-blue-600 mb-2">1. WILL</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded mb-4 inline-block">Si Spontan</span>
+                                <ul class="space-y-3 text-sm text-gray-700">
+                                    <li>⚡ <strong>Keputusan Mendadak:</strong><br>"Eh panas nih. I <strong>will</strong> open the window." (Baru dipikirkan sekarang).</li>
+                                    <li>🤝 <strong>Janji (Promise):</strong><br>"I <strong>will</strong> marry you." (Janji manis).</li>
+                                    <li>🔮 <strong>Prediksi tanpa bukti:</strong><br>"I think it <strong>will</strong> rain." (Cuma tebakan).</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-green-500 relative">
+                                <h4 class="font-black text-xl text-green-600 mb-2">2. BE GOING TO</h4>
+                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded mb-4 inline-block">Si Terencana</span>
+                                <ul class="space-y-3 text-sm text-gray-700">
+                                    <li>📅 <strong>Rencana Matang:</strong><br>"I <strong>am going to</strong> Bali next week." (Tiket sudah dibeli).</li>
+                                    <li>clouds <strong>Prediksi ada bukti:</strong><br>"Look at the black clouds! It <strong>is going to</strong> rain." (Buktinya jelas).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Rumus Dasar (Will)</h3>
+                        <p class="mb-4 text-sm text-gray-600">
+                            Untuk pemula, kita fokus ke rumus <strong>WILL</strong> karena paling sering dipakai dan paling mudah. Kabar baiknya: Tidak ada Tim Manja/Santai di sini. Semua subject SAMA!
+                        </p>
+                        
+                        <div class="text-center mb-6">
+                            <span class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-xl shadow-lg font-black text-2xl tracking-wide">
+                                S + WILL + Verb 1
+                            </span>
+                        </div>
+
+                        <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                            <strong class="text-yellow-800 block mb-1">⚠ ATURAN PENTING:</strong>
+                            <p class="text-sm text-yellow-900">
+                                Setelah kata <strong>WILL</strong>, kata kerja haram hukumnya ditambah s, es, ing, atau ed. Wajib <strong>VERB 1 MURNI (Polos)</strong>.
+                            </p>
+                            <div class="mt-3 grid grid-cols-1 gap-2 text-sm font-mono">
+                                <p class="text-green-700">✅ She will <strong>go</strong>.</p>
+                                <p class="text-red-500 line-through">❌ She will goes.</p>
+                                <p class="text-red-500 line-through">❌ She will going.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Bilang "TIDAK" & Bertanya</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-red-500 shadow-sm">
+                                <strong class="text-red-700 text-lg block mb-1">⛔ Negatif (Will Not / Won't)</strong>
+                                <p class="text-sm text-gray-600 mb-2">Singkatan dari Will Not adalah <strong>Won't</strong>.</p>
+                                <p class="font-mono text-sm bg-red-50 p-2 rounded text-red-800">
+                                    "I <strong>won't</strong> come to your party."
+                                </p>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-cyan-500 shadow-sm">
+                                <strong class="text-cyan-700 text-lg block mb-1">❓ Bertanya (Interrogative)</strong>
+                                <p class="text-sm text-gray-600 mb-2">Pindahkan <strong>Will</strong> ke paling depan.</p>
+                                <p class="font-mono text-sm bg-cyan-50 p-2 rounded text-cyan-800">
+                                    "<strong>Will</strong> you marry me?"
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <hr class="border-gray-200">
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">🚀 Sinyal Waktu (Time Signal)</h3>
+                        <p class="mb-4 text-sm text-gray-600">Kata-kata penunjuk masa depan:</p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                            <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                                <strong class="block text-cyan-700">Tomorrow</strong>
+                                <span class="text-xs text-gray-500">Besok</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                                <strong class="block text-cyan-700">Next ...</strong>
+                                <span class="text-xs text-gray-500">Week/Month/Year</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                                <strong class="block text-cyan-700">Later</strong>
+                                <span class="text-xs text-gray-500">Nanti</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                                <strong class="block text-cyan-700">Soon</strong>
+                                <span class="text-xs text-gray-500">Segera</span>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-future-choice')" class="w-full px-6 py-4 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-6" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-teal-50">
+            <div class="max-w-4xl w-full text-center">
+                <span class="bg-teal-100 text-teal-800 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">BAB 2</span>
+                <h2 class="text-4xl font-black text-teal-900 mb-2">Auxiliary Mastery</h2>
+                <p class="text-gray-600 mb-10">Pilih Kata Bantu yang ingin dipelajari:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="goToSlide('slide-aux-do-choice')" class="bg-white hover:bg-teal-600 hover:text-white text-teal-900 p-8 rounded-2xl shadow-xl border-b-4 border-teal-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">🏃</div>
+                        <div class="text-4xl mb-4 bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">⚡</div>
+                        <h3 class="text-2xl font-black mb-2">Do / Does / Did</h3>
+                        <p class="text-sm opacity-80 font-medium">Untuk Kalimat Verbal (Aksi)</p>
+                    </button>
+
+                    <button onclick="goToSlide('slide-aux-tobe-choice')" class="bg-white hover:bg-indigo-600 hover:text-white text-indigo-900 p-8 rounded-2xl shadow-xl border-b-4 border-indigo-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">🧘</div>
+                        <div class="text-4xl mb-4 bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">✨</div>
+                        <h3 class="text-2xl font-black mb-2">To Be (Is / Are / Am)</h3>
+                        <p class="text-sm opacity-80 font-medium">Untuk Kalimat Nominal (Sifat)</p>
+                    </button>
+                </div>
+
+                <button onclick="goToSlide('slide-menu')" class="mt-12 text-gray-500 font-bold hover:text-teal-600 transition flex items-center justify-center gap-2 mx-auto">
+                    <span>🏠</span> Kembali ke Menu Utama
+                </button>
+            </div>
+        </div>
+
+        <div id="slide-aux-do-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-teal-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-teal-600">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Do / Does / Did</h2>
+                <p class="text-gray-500 mb-8">The Verbal Bodyguards</p>
+                
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-aux-do-materi')" class="w-full bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi Lengkap
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Latihan di Quizizz
+                    </button>
+                </div>
+                
+                <button onclick="goToSlide('slide-6')" class="mt-6 text-sm text-gray-400 font-bold">Kembali ke Bab 2</button>
+            </div>
+        </div>
+
+        <div id="slide-aux-do-materi" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-teal-100 p-2 rounded-full text-2xl">🛡️</div>
+                    <div>
+                        <span class="text-teal-600 font-bold text-xs tracking-widest uppercase">Auxiliary Verbs</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Do / Does / Did</h2>
+                    </div>
+                </div>
+                <button onclick="goToSlide('slide-aux-do-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-teal-900 mb-4 border-l-4 border-teal-500 pl-3">Siapa Mereka Sebenarnya?</h3>
+                        <p class="mb-4">
+                            Dalam kalimat positif bahasa Inggris, Kata Kerja (Verb) itu mandiri. Contoh: <em>"I eat."</em> (Saya makan).
+                        </p>
+                        <p class="mb-4">
+                            TAPI, saat kita ingin bilang <strong>"TIDAK"</strong> (Negatif) atau <strong>"BERTANYA"</strong> (Interrogative), Verb utama itu lemah. Dia tidak bisa sendirian. Dia butuh <strong>Bodyguard (Pengawal)</strong>.
+                        </p>
+                        <div class="bg-teal-50 p-5 rounded-2xl border border-teal-200 text-center">
+                            <strong class="text-teal-800 block mb-2 text-lg">Peran Utama "The Trio D":</strong>
+                            <p class="text-sm text-gray-600">Muncul hanya untuk membantu kalimat Negatif & Tanya.</p>
+                            <div class="mt-3 text-xs font-mono font-bold text-teal-700 bg-white p-2 rounded inline-block border border-teal-100">
+                                Mereka TIDAK diartikan "Mengerjakan", tapi tidak diterjemahkan.
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">🗺️ Pembagian Wilayah Kerja</h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-green-500 relative">
+                                <span class="absolute top-4 right-4 text-3xl">☀️</span>
+                                <h4 class="font-black text-xl text-green-700 mb-2">1. DO & DOES</h4>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">PRESENT TENSE (SEKARANG)</p>
+                                <p class="text-sm text-gray-700 mb-4">Digunakan untuk Fakta & Kebiasaan. Di sini terjadi perpecahan kubu:</p>
+                                <ul class="space-y-3 text-sm">
+                                    <li class="flex items-start gap-2">
+                                        <span class="bg-green-100 font-bold px-2 rounded text-green-800">DO</span>
+                                        <span>Untuk <strong>Tim Santai</strong> (I, You, We, They).</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="bg-orange-100 font-bold px-2 rounded text-orange-800">DOES</span>
+                                        <span>Untuk <strong>Tim Manja</strong> (She, He, It).</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-3xl shadow-md border-t-8 border-indigo-500 relative">
+                                <span class="absolute top-4 right-4 text-3xl">⏪</span>
+                                <h4 class="font-black text-xl text-indigo-700 mb-2">2. DID</h4>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">PAST TENSE (MASA LALU)</p>
+                                <p class="text-sm text-gray-700 mb-4">Digunakan untuk Sejarah/Masa Lalu. Kabar baiknya:</p>
+                                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 text-center">
+                                    <strong class="text-indigo-900 text-sm">TIDAK ADA PERPECAHAN!</strong>
+                                    <p class="text-xs text-gray-500 mt-1">Semua Subject (I, You, We, They, She, He, It) memakai <strong>DID</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-yellow-50 p-6 rounded-3xl border-2 border-yellow-400 relative overflow-hidden">
+                        <div class="absolute -right-10 -top-10 opacity-10 text-9xl">🧹</div>
+                        <h3 class="text-xl font-black text-yellow-900 mb-4 flex items-center gap-2">
+                            <span>⚠️</span> ATURAN MUTLAK: The Vacuum Cleaner
+                        </h3>
+                        <p class="mb-4 text-yellow-900 text-sm leading-relaxed">
+                            Ini adalah aturan yang paling sering dilanggar mahasiswa. Ingat baik-baik:
+                            <br><br>
+                            <strong>"Do, Does, dan Did adalah PENYEDOT."</strong>
+                            <br>
+                            Saat mereka muncul dalam kalimat, mereka menyedot semua imbuhan (s, es, ed, d) dari Kata Kerja Utama.
+                        </p>
+                        
+                        <div class="bg-white p-4 rounded-xl shadow-sm space-y-4">
+                            <div class="border-b border-gray-100 pb-2">
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Kasus DOES (Tim Manja)</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-red-500 line-through text-sm">She doesn't eats.</span>
+                                    <span class="text-gray-400 text-xs">❌ (Double S)</span>
+                                </div>
+                                <div class="flex justify-between items-center mt-1">
+                                    <span class="text-green-700 font-bold text-sm">She doesn't eat.</span>
+                                    <span class="text-green-600 text-xs">✅ (Verb 1 Murni)</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase mb-1">Kasus DID (Masa Lalu)</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-red-500 line-through text-sm">Did you played?</span>
+                                    <span class="text-gray-400 text-xs">❌ (Double Past)</span>
+                                </div>
+                                <div class="flex justify-between items-center mt-1">
+                                    <span class="text-green-700 font-bold text-sm">Did you play?</span>
+                                    <span class="text-green-600 text-xs">✅ (Kembali ke V1)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Rumus Cepat (Cheat Sheet)</h3>
+                        <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                                    <tr>
+                                        <th class="px-6 py-3">Tense</th>
+                                        <th class="px-6 py-3">Subject</th>
+                                        <th class="px-6 py-3">Helper</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 font-bold text-green-600">Present</td>
+                                        <td class="px-6 py-4">I, You, We, They</td>
+                                        <td class="px-6 py-4 font-bold bg-green-50">DO / DON'T</td>
+                                    </tr>
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4 font-bold text-green-600">Present</td>
+                                        <td class="px-6 py-4">She, He, It</td>
+                                        <td class="px-6 py-4 font-bold bg-orange-50">DOES / DOESN'T</td>
+                                    </tr>
+                                    <tr class="bg-white">
+                                        <td class="px-6 py-4 font-bold text-indigo-600">Past</td>
+                                        <td class="px-6 py-4">SEMUA</td>
+                                        <td class="px-6 py-4 font-bold bg-indigo-50">DID / DIDN'T</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="bg-red-50 p-6 rounded-3xl border border-red-100">
+                        <h3 class="font-bold text-red-900 text-lg mb-2">🚫 Jangan Lakukan Ini!</h3>
+                        <p class="text-sm text-red-800 mb-4">
+                            Kesalahan fatal adalah menggunakan Do/Does/Did bertemu dengan <strong>TO BE (Is/Am/Are/Was/Were)</strong> dalam satu kalimat. Mereka musuh bebuyutan!
+                        </p>
+                        <div class="bg-white p-4 rounded-xl text-center space-y-2">
+                            <p class="text-red-500 line-through text-sm">Does she is happy?</p>
+                            <p class="text-green-600 font-bold text-sm">Is she happy? ✅</p>
+                            <p class="text-xs text-gray-500 italic mt-2">
+                                (Karena 'Happy' itu sifat, bukan kata kerja aksi. Jadi jangan panggil Trio D, panggillah To Be).
+                            </p>
+                        </div>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-aux-do-choice')" class="w-full px-6 py-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-aux-tobe-choice" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-indigo-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-indigo-600">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">To Be (Is / Am / Are)</h2>
+                <p class="text-gray-500 mb-8">The Nominal Kings</p>
+                
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-aux-tobe-materi')" class="w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi Lengkap
+                    </button>
+                    
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Latihan di Quizizz
+                    </button>
+                </div>
+                
+                <button onclick="goToSlide('slide-6')" class="mt-6 text-sm text-gray-400 font-bold">Kembali ke Bab 2</button>
+            </div>
+        </div>
+
+        <div id="slide-aux-tobe-materi" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-100 p-2 rounded-full text-2xl">🧘</div>
+                    <div>
+                        <span class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Nominal Sentence</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Is / Am / Are</h2>
+                    </div>
+                </div>
+                <button onclick="goToSlide('slide-aux-tobe-choice')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-4 border-l-4 border-indigo-500 pl-3">Kapan Kita Pakai To Be?</h3>
+                        <p class="mb-4">
+                            Ingat aturan ini: <strong>To Be adalah musuh Kata Kerja Aksi (Verb 1).</strong>
+                        </p>
+                        <p class="mb-4">
+                            Kita menggunakan <em>Is/Am/Are</em> HANYA jika kalimat tersebut <strong>TIDAK MELAKUKAN APA-APA</strong>. Kalimat ini disebut <strong>Kalimat Nominal</strong>. Isinya cuma menjelaskan Identitas, Sifat, atau Lokasi.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mt-4 text-center">
+                            <div class="bg-red-50 p-3 rounded-xl border border-red-100 opacity-50">
+                                <strong class="block text-red-900 line-through">I am eat.</strong>
+                                <span class="text-xs text-red-700">Salah (Ada aksi makan)</span>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-xl border border-green-100">
+                                <strong class="block text-green-900">I am hungry.</strong>
+                                <span class="text-xs text-green-700">Benar (Menjelaskan kondisi)</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border-l-8 border-purple-500">
+                                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-xl font-black text-purple-700">AM</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Khusus "I" (Saya)</h4>
+                                    <p class="text-sm text-gray-600">Eksklusif. Tidak boleh dipakai yang lain.</p>
+                                    <p class="text-xs font-mono text-purple-600 mt-1">"I am happy."</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border-l-8 border-orange-500">
+                                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-xl font-black text-orange-700">IS</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Si Tunggal (Single)</h4>
+                                    <p class="text-sm text-gray-600">She, He, It, Nama Orang Satu (Budi).</p>
+                                    <p class="text-xs font-mono text-orange-600 mt-1">"She is beautiful."</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border-l-8 border-green-500">
+                                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-xl font-black text-green-700">ARE</div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Si Jamak (Rame-rame)</h4>
+                                    <p class="text-sm text-gray-600">You, We, They, Dua Orang (Budi & Andi).</p>
+                                    <p class="text-xs font-mono text-green-600 mt-1">"They are smart."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-indigo-50 p-6 rounded-3xl border border-indigo-100">
+                        <h3 class="text-xl font-black text-indigo-900 mb-4">Rumus</h3>
+                        <p class="mb-4 text-sm text-indigo-800">
+                            Setelah To Be (Is/Am/Are), kata apa yang boleh muncul? Ingat saja <strong>ANA</strong>:
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="bg-white p-4 rounded-xl text-center">
+                                <span class="text-2xl block mb-1">😎</span>
+                                <strong class="text-indigo-900 block">Adjective</strong>
+                                <span class="text-xs text-gray-500">(Sifat)</span>
+                                <p class="text-xs font-mono font-bold mt-2">Smart, Happy, Sad</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl text-center">
+                                <span class="text-2xl block mb-1">🍎</span>
+                                <strong class="text-indigo-900 block">Noun</strong>
+                                <span class="text-xs text-gray-500">(Benda/Identitas)</span>
+                                <p class="text-xs font-mono font-bold mt-2">Doctor, Student, Table</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl text-center">
+                                <span class="text-2xl block mb-1">📍</span>
+                                <strong class="text-indigo-900 block">Adverb</strong>
+                                <span class="text-xs text-gray-500">(Keterangan Tempat)</span>
+                                <p class="text-xs font-mono font-bold mt-2">Here, In class, At home</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Negatif & Tanya (Tanpa Do/Does!)</h3>
+                        <p class="mb-4 text-sm text-gray-600">
+                            Karena To Be itu sudah "Raja", dia tidak butuh bantuan Do/Does untuk bikin kalimat negatif atau tanya. Dia bisa sendiri.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border border-red-200">
+                                <strong class="text-red-700 block mb-1">⛔ Negatif (Cukup Tambah NOT)</strong>
+                                <p class="text-sm font-mono mt-1 text-gray-800">
+                                    "She <strong>is not</strong> (isn't) hungry."
+                                </p>
+                                <p class="text-xs text-red-400 mt-1 line-through">She doesn't hungry.</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-blue-200">
+                                <strong class="text-blue-700 block mb-1">❓ Tanya (Pindah ke Depan)</strong>
+                                <p class="text-sm font-mono mt-1 text-gray-800">
+                                    "<strong>Are</strong> you happy?"
+                                </p>
+                                <p class="text-xs text-red-400 mt-1 line-through">Do you happy?</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-red-900 text-white p-6 rounded-3xl shadow-xl text-center">
+                        <h3 class="text-2xl font-black mb-2">GRAMMAR</h3>
+                        <p class="text-red-100 text-sm mb-6">Jangan pernah menggabungkan To Be dengan Kata Kerja Bentuk 1 (V1).</p>
+                        
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20 text-left space-y-3">
+                            <div>
+                                <p class="text-red-300 line-through text-sm">I am agree.</p>
+                                <p class="text-green-300 font-bold text-sm">✅ I agree. <span class="text-xs font-normal text-white">(Verbal)</span></p>
+                            </div>
+                            <div>
+                                <p class="text-red-300 line-through text-sm">She is study.</p>
+                                <p class="text-green-300 font-bold text-sm">✅ She studies. <span class="text-xs font-normal text-white">(Verbal)</span></p>
+                                <p class="text-green-300 font-bold text-sm">✅ She is a student. <span class="text-xs font-normal text-white">(Nominal)</span></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-aux-tobe-choice')" class="w-full px-6 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+       <div id="slide-8" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-pink-50">
+            <div class="max-w-4xl w-full text-center">
+                <span class="bg-pink-100 text-pink-800 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">BAB 3</span>
+                <h2 class="text-4xl font-black text-pink-900 mb-2">Verb Changes</h2>
+                <p class="text-gray-600 mb-10">Jantungnya Kalimat Bahasa Inggris</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="goToSlide('slide-choice-regular')" class="bg-white hover:bg-pink-600 hover:text-white text-pink-900 p-8 rounded-2xl shadow-xl border-b-4 border-pink-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">😇</div>
+                        <div class="text-4xl mb-4 bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">✅</div>
+                        <h3 class="text-2xl font-black mb-2">Regular Verbs</h3>
+                        <p class="text-sm opacity-80 font-medium">Si Anak Patuh (+ed)</p>
+                    </button>
+
+                    <button onclick="goToSlide('slide-choice-irregular')" class="bg-white hover:bg-purple-600 hover:text-white text-purple-900 p-8 rounded-2xl shadow-xl border-b-4 border-purple-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">😎</div>
+                        <div class="text-4xl mb-4 bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">💥</div>
+                        <h3 class="text-2xl font-black mb-2">Irregular Verbs</h3>
+                        <p class="text-sm opacity-80 font-medium">Si Pemberontak (Acak)</p>
+                    </button>
+                </div>
+
+                <button onclick="goToSlide('slide-menu')" class="mt-12 text-gray-500 font-bold hover:text-pink-600 transition flex items-center justify-center gap-2 mx-auto">
+                    <span>🏠</span> Kembali ke Menu Utama
+                </button>
+            </div>
+        </div>
+
+        <div id="slide-choice-regular" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-pink-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-pink-500">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Regular Verbs</h2>
+                <p class="text-gray-500 mb-8">Si Anak Patuh</p>
+                
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-verb-regular')" class="w-full bg-pink-100 hover:bg-pink-200 text-pink-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi Lengkap
+                    </button>
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                
+                <button onclick="goToSlide('slide-8')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-choice-irregular" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-purple-50">
+            <div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-t-8 border-purple-500">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">Irregular Verbs</h2>
+                <p class="text-gray-500 mb-8">Si Pemberontak</p>
+                
+                <div class="space-y-4 mt-6">
+                    <button onclick="goToSlide('slide-verb-irregular')" class="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>📖</span> Buka Materi Lengkap
+                    </button>
+                    <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-full bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition">
+                        <span>🚀</span> Kuis di Quizizz
+                    </button>
+                </div>
+                
+                <button onclick="goToSlide('slide-8')" class="mt-6 text-sm text-gray-400 font-bold">Kembali</button>
+            </div>
+        </div>
+
+        <div id="slide-verb-regular" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-pink-100 p-2 rounded-full text-2xl">😇</div>
+                    <div><span class="text-pink-600 font-bold text-xs tracking-widest uppercase">The Good Kids</span><h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Regular Verbs</h2></div>
+                </div>
+                <button onclick="goToSlide('slide-choice-regular')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-pink-900 mb-4">Apa itu V1, V2, V3?</h3>
+                        <p class="mb-4 text-sm">Sebelum masuk ke jenisnya, pahami dulu fungsinya. Kata kerja itu seperti baju, diganti sesuai acara (Waktu).</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="bg-green-50 p-3 rounded-xl border border-green-100"><strong class="text-green-800 text-lg block">V1</strong><span class="text-xs text-gray-500">Present / Masa Kini</span><p class="text-xs font-mono font-bold mt-1">Eat, Play, Sleep</p></div>
+                            <div class="bg-orange-50 p-3 rounded-xl border border-orange-100"><strong class="text-orange-800 text-lg block">V2</strong><span class="text-xs text-gray-500">Past / Masa Lalu</span><p class="text-xs font-mono font-bold mt-1">Ate, Played, Slept</p></div>
+                            <div class="bg-purple-50 p-3 rounded-xl border border-purple-100"><strong class="text-purple-800 text-lg block">V3</strong><span class="text-xs text-gray-500">Perfect / Passive</span><p class="text-xs font-mono font-bold mt-1">Eaten, Played, Slept</p></div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Regular Verbs (Si Anak Patuh)</h3>
+                        <p class="mb-6">Kelompok ini disebut "Regular" karena perubahannya <strong>TERATUR</strong>. Mereka sangat patuh pada satu aturan: <span class="bg-pink-100 text-pink-800 px-2 font-bold rounded">Tambahkan akhiran -ed / -d</span>.</p>
+                        <div class="space-y-6">
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-pink-500 shadow-sm"><strong class="text-pink-800 text-lg block mb-2">1. Aturan Dasar (+ed)</strong><div class="grid grid-cols-3 gap-2 font-mono text-sm bg-pink-50 p-3 rounded-lg text-center font-bold text-gray-700"><div>Watch</div><div>➜</div><div class="text-pink-600">Watched</div><div>Play</div><div>➜</div><div class="text-pink-600">Played</div></div></div>
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm"><strong class="text-blue-800 text-lg block mb-2">2. Berakhiran 'e' (+d)</strong><div class="grid grid-cols-3 gap-2 font-mono text-sm bg-blue-50 p-3 rounded-lg text-center font-bold text-gray-700"><div>Love</div><div>➜</div><div class="text-blue-600">Loved</div></div></div>
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-orange-500 shadow-sm"><strong class="text-orange-800 text-lg block mb-2">3. Huruf 'y' (Ganti i + ed)</strong><p class="text-sm text-gray-600 mb-1">Jika sebelum 'y' ada konsonan.</p><div class="grid grid-cols-3 gap-2 font-mono text-sm bg-orange-50 p-3 rounded-lg text-center font-bold text-gray-700"><div>Study</div><div>➜</div><div class="text-orange-600">Studied</div></div></div>
+                        </div>
+                    </section>
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-choice-regular')" class="w-full px-6 py-4 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-verb-irregular" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-purple-100 p-2 rounded-full text-2xl">😎</div>
+                    <div><span class="text-purple-600 font-bold text-xs tracking-widest uppercase">The Rebels</span><h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Irregular Verbs</h2></div>
+                </div>
+                <button onclick="goToSlide('slide-choice-irregular')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-purple-900 mb-4">Si Pemberontak</h3>
+                        <p class="mb-4">Kelompok ini <strong>TIDAK PUNYA ATURAN BAKU</strong>. Bentuk V2 dan V3-nya bisa berubah total.</p>
+                        <div class="bg-red-50 p-4 rounded-xl text-center border border-red-200"><strong class="text-red-800 text-lg">Solusi: WAJIB DIHAFAL</strong></div>
+                    </section>
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6">4 Kelompok Irregular</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-gray-500 shadow-sm"><strong class="text-gray-800 text-lg block mb-2">1. Kembar Tiga (A-A-A)</strong><div class="bg-gray-100 rounded-lg p-3 text-center font-mono font-bold text-gray-800 text-sm">Cut - Cut - Cut</div></div>
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-indigo-500 shadow-sm"><strong class="text-indigo-800 text-lg block mb-2">2. Kembar Akhir (A-B-B)</strong><div class="bg-indigo-50 rounded-lg p-3 text-center font-mono font-bold text-gray-800 text-sm">Buy - Bought - Bought</div></div>
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-red-500 shadow-sm"><strong class="text-red-800 text-lg block mb-2">3. Beda Semua (A-B-C)</strong><div class="bg-red-50 rounded-lg p-3 text-center font-mono font-bold text-gray-800 text-sm">Go - Went - Gone</div></div>
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-yellow-500 shadow-sm"><strong class="text-yellow-800 text-lg block mb-2">4. Balik Awal (A-B-A)</strong><div class="bg-yellow-50 rounded-lg p-3 text-center font-mono font-bold text-gray-800 text-sm">Come - Came - Come</div></div>
+                        </div>
+                    </section>
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto">
+                    <button onclick="goToSlide('slide-choice-irregular')" class="w-full px-6 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>✅</span> Selesai Membaca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-bab4-menu" class="hidden h-full flex flex-col items-center justify-center p-6 slide-enter bg-indigo-50">
+            <div class="max-w-4xl w-full text-center">
+                <span class="bg-indigo-100 text-indigo-800 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">BAB 4</span>
+                <h2 class="text-4xl font-black text-indigo-900 mb-2">Continuous Tense</h2>
+                <p class="text-gray-600 mb-10">Kejadian yang "Sedang" Berlangsung</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="goToSlide('slide-cont-present')" class="bg-white hover:bg-indigo-600 hover:text-white text-indigo-900 p-8 rounded-2xl shadow-xl border-b-4 border-indigo-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">📹</div>
+                        <div class="text-4xl mb-4 bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">🔴</div>
+                        <h3 class="text-2xl font-black mb-2">Present Continuous</h3>
+                        <p class="text-sm opacity-80 font-medium">Sedang Terjadi SEKARANG</p>
+                    </button>
+
+                    <button onclick="goToSlide('slide-cont-past')" class="bg-white hover:bg-orange-600 hover:text-white text-orange-900 p-8 rounded-2xl shadow-xl border-b-4 border-orange-200 transition hover:-translate-y-1 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:rotate-12 transition">🕰️</div>
+                        <div class="text-4xl mb-4 bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto group-hover:bg-white/20 transition">⏪</div>
+                        <h3 class="text-2xl font-black mb-2">Past Continuous</h3>
+                        <p class="text-sm opacity-80 font-medium">Sedang Terjadi DULU</p>
+                    </button>
+                </div>
+
+                <button onclick="goToSlide('slide-menu')" class="mt-12 text-gray-500 font-bold hover:text-indigo-600 transition flex items-center justify-center gap-2 mx-auto">
+                    <span>🏠</span> Kembali ke Menu Utama
+                </button>
+            </div>
+        </div>
+
+        <div id="slide-cont-present" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-100 p-2 rounded-full text-2xl">📹</div>
+                    <div><span class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Live Action</span><h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Present Continuous</h2></div>
+                </div>
+                <button onclick="goToSlide('slide-bab4-menu')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-4 border-l-4 border-indigo-500 pl-3">Konsep "LIVE CCTV"</h3>
+                        <p class="mb-4">Bayangkan kamu sedang melihat kamera CCTV. Apa yang <strong>sedang</strong> dilakukan subjek detik ini juga? Itulah Present Continuous.</p>
+                        <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-200">
+                            <strong class="text-indigo-800 text-lg">Rumus Wajib: To Be + V-ing</strong>
+                            <p class="text-sm text-gray-600 mt-1">Jangan pernah pisahkan To Be dan Verb-ing!</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Rumus Dasar</h3>
+                        <div class="text-center mb-8">
+                            <span class="bg-white px-6 py-4 rounded-xl shadow-lg border-2 border-indigo-200 font-black text-xl tracking-wide text-indigo-600">
+                                S + (Is/Am/Are) + Verb-ing
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                                <strong class="text-purple-800 block">1. Untuk "I" (Saya)</strong>
+                                <p class="font-mono mt-1">I <strong>am</strong> eat<strong>ing</strong>.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                                <strong class="text-orange-800 block">2. Untuk Tunggal (She/He/It)</strong>
+                                <p class="font-mono mt-1">She <strong>is</strong> sleep<strong>ing</strong>.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
+                                <strong class="text-green-800 block">3. Untuk Jamak (You/We/They)</strong>
+                                <p class="font-mono mt-1">They <strong>are</strong> play<strong>ing</strong>.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-yellow-50 p-6 rounded-3xl border border-yellow-100">
+                        <h3 class="font-bold text-yellow-900 text-lg mb-2">⏳ Penanda Waktu (Sekarang!)</h3>
+                        <p class="text-sm text-yellow-800 mb-4">Kata kunci yang sering muncul:</p>
+                        <div class="flex flex-wrap gap-2 font-bold text-yellow-900">
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Now</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Right now</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">At the moment</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Look!</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Listen!</span>
+                        </div>
+                    </section>
+                    
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex gap-4">
+                     <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>🚀</span> Kuis Present Cont.
+                    </button>
+                    <button onclick="goToSlide('slide-bab4-menu')" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-4 rounded-xl transition">
+                        Kembali
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="slide-cont-past" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-orange-100 p-2 rounded-full text-2xl">🕰️</div>
+                    <div><span class="text-orange-600 font-bold text-xs tracking-widest uppercase">Flashback Story</span><h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Past Continuous</h2></div>
+                </div>
+                <button onclick="goToSlide('slide-bab4-menu')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
+                <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                        <h3 class="text-xl font-bold text-orange-900 mb-4 border-l-4 border-orange-500 pl-3">Konsep "Interupsi"</h3>
+                        <p class="mb-4">
+                            Digunakan untuk menceritakan kejadian yang <strong>SEDANG BERLANGSUNG DI MASA LALU</strong>.
+                            <br>Biasanya digunakan dalam <em>storytelling</em> ketika ada kejadian lain yang memotong.
+                        </p>
+                        <div class="bg-orange-50 p-4 rounded-xl text-center border border-orange-200">
+                            <strong class="text-orange-800 text-lg">Rumus: Was/Were + Verb-ing</strong>
+                            <p class="text-sm text-gray-600 mt-1">To Be berubah jadi bentuk Lampau (Bab 2).</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Penerapan</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                                <strong class="text-purple-800 block">1. Subject Tunggal (I, She, He, It)</strong>
+                                <p class="text-sm text-gray-600 mb-1">Gunakan <strong>Was</strong>.</p>
+                                <p class="font-mono mt-1 font-bold text-purple-700">"I was sleeping when you called."</p>
+                                <p class="text-xs text-gray-500 italic">(Saya sedang tidur pas kamu nelpon)</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
+                                <strong class="text-green-800 block">2. Subject Jamak (You, We, They)</strong>
+                                <p class="text-sm text-gray-600 mb-1">Gunakan <strong>Were</strong>.</p>
+                                <p class="font-mono mt-1 font-bold text-green-700">"They were playing football at 5 PM yesterday."</p>
+                                <p class="text-xs text-gray-500 italic">(Jam 5 kemarin, mereka sedang main bola)</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-blue-50 p-6 rounded-3xl border border-blue-100">
+                        <h3 class="font-bold text-blue-900 text-lg mb-4">🔥 Pasangan Abadi: When & While</h3>
+                        <p class="text-sm text-blue-800 mb-4">Past Continuous jarang berdiri sendiri. Dia sering ditemani:</p>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg">
+                                <strong class="text-blue-700 block">WHEN (Ketika) + V2 (Kejadian Singkat)</strong>
+                                <p class="text-sm">I was eating <strong>when</strong> he came.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <strong class="text-blue-700 block">WHILE (Sementara) + V-ing (Kejadian Panjang)</strong>
+                                <p class="text-sm">He came <strong>while</strong> I was eating.</p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <div class="h-10"></div>
+                </div>
+            </div>
+
+            <div class="flex-none p-4 border-t border-gray-100 bg-white/90 backdrop-blur">
+                <div class="max-w-3xl mx-auto flex gap-4">
+                     <button onclick="window.open('https://quizizz.com/join', '_blank')" class="w-2/3 bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>🚀</span> Kuis Past Cont.
+                    </button>
+                    <button onclick="goToSlide('slide-bab4-menu')" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-4 rounded-xl transition">
+                        Kembali
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. NAVIGASI SLIDE
+        function goToSlide(slideId) {
+            // Sembunyikan semua slide
+            const allSlides = document.querySelectorAll('[id^="slide-"]');
+            allSlides.forEach(slide => slide.classList.add('hidden'));
+
+            // Tampilkan slide tujuan
+            const target = document.getElementById(slideId);
+            if (target) {
+                target.classList.remove('hidden');
+                // SIMPAN POSISI TERAKHIR KE MEMORI
+                localStorage.setItem('last_slide', slideId);
+            }
+
+            // Atur tombol home
+            const homeBtn = document.getElementById('home-btn');
+            if (slideId === 'slide-login' || slideId === 'slide-menu') {
+                if(homeBtn) homeBtn.classList.add('hidden');
+            } else {
+                if(homeBtn) homeBtn.classList.remove('hidden');
+            }
+            
+            closeSidebar();
+        }
+
+        // 2. LOGIKA LOGIN
+        function login() {
+            const nama = document.getElementById('input-nama').value;
+            const nim = document.getElementById('input-nim').value;
+            if (nama.trim() === "" || nim.trim() === "") {
+                alert("Harap isi Nama dan NIM terlebih dahulu!");
+                return;
+            }
+            localStorage.setItem('mhs_nama', nama);
+            localStorage.setItem('mhs_nim', nim);
+            updateProfileData();
+            goToSlide('slide-menu');
+        }
+
+        // 3. LOGIKA SIDEBAR
+        function openSidebar() {
+            const sb = document.getElementById('profile-sidebar');
+            const ov = document.getElementById('sidebar-overlay');
+            if(sb && ov) {
+                sb.classList.remove('hidden', 'sidebar-exit');
+                sb.classList.add('sidebar-enter');
+                ov.classList.remove('hidden');
+            }
+        }
+
+        function closeSidebar() {
+            const sb = document.getElementById('profile-sidebar');
+            const ov = document.getElementById('sidebar-overlay');
+            if(sb && ov) {
+                sb.classList.remove('sidebar-enter');
+                sb.classList.add('sidebar-exit');
+                setTimeout(() => { sb.classList.add('hidden'); }, 300);
+                ov.classList.add('hidden');
+            }
+        }
+
+        function updateProfileData() {
+            const nama = localStorage.getItem('mhs_nama');
+            const nim = localStorage.getItem('mhs_nim');
+            if (nama) {
+                const elNama = document.getElementById('sidebar-nama');
+                const elNim = document.getElementById('sidebar-nim');
+                const elWelcome = document.getElementById('menu-welcome-name');
+                
+                if(elNama) elNama.innerText = nama;
+                if(elNim) elNim.innerText = nim;
+                if(elWelcome) elWelcome.innerText = nama.split(' ')[0];
+            }
+        }
+
+        function logout() {
+            if(confirm("Yakin ingin keluar?")) {
+                localStorage.clear(); // Hapus semua data termasuk posisi terakhir
+                document.getElementById('input-nama').value = "";
+                document.getElementById('input-nim').value = "";
+                goToSlide('slide-login');
+            }
+        }
+
+        // 4. LOGIKA KUIS
+        function checkAnswer(element, status) {
+            const parent = element.parentElement;
+            const siblings = parent.children;
+            for(let i=0; i<siblings.length; i++) {
+                siblings[i].classList.remove('correct', 'wrong');
+            }
+            if(status === 'correct') {
+                element.classList.add('correct');
+                // Tambahkan icon check jika belum ada
+                if(!element.innerHTML.includes('✅')) element.innerHTML += ' ✅';
+            } else {
+                element.classList.add('wrong');
+                if(!element.innerHTML.includes('❌')) element.innerHTML += ' ❌';
+            }
+        }
+
+        // 5. CEK STATUS SAAT APLIKASI DIBUKA (AUTO RESUME)
+        window.onload = function() {
+            const nama = localStorage.getItem('mhs_nama');
+            const lastSlide = localStorage.getItem('last_slide'); // Cek posisi terakhir
+            
+            if (nama) {
+                updateProfileData();
+                
+                // Jika ada riwayat slide terakhir & slidenya valid, buka slide itu
+                if (lastSlide && document.getElementById(lastSlide) && lastSlide !== 'slide-login') {
+                    goToSlide(lastSlide);
+                } else {
+                    // Jika tidak ada riwayat, buka menu utama
+                    goToSlide('slide-menu');
+                }
+            } else {
+                goToSlide('slide-login');
+            }
+        };
+    </script>
+</body>
+</html>
