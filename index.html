@@ -8,8 +8,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Poppins', sans-serif; }
         
+        /* Rumus Gerak Melayang */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Rumus Gerak Melayang (Arah Sebaliknya) */
+        @keyframes float-reverse {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(15px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Kelas Pemanggil Animasi */
+        .animasi-float { animation: float 6s ease-in-out infinite; }
+        .animasi-float-slow { animation: float 8s ease-in-out infinite; animation-delay: 1s; }
+        .animasi-float-reverse { animation: float-reverse 7s ease-in-out infinite; animation-delay: 0.5s; }
+
+        body { font-family: 'Poppins', sans-serif; }
+
+        /* Animasi Background Bergerak */
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #2563eb, #db2777, #7c3aed, #0d9488);
+            background-size: 400% 400%;
+            animation: gradient-move 15s ease infinite;
+        }
+
         /* Animasi Slide */
         .slide-enter { animation: slideIn 0.4s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -34,7 +67,9 @@
         input:focus { outline: none; border-color: #FBBF24; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3); }
     </style>
 </head>
-<body class="bg-slate-100 h-screen overflow-hidden text-gray-800">
+<body class="animated-bg h-screen overflow-hidden text-gray-800 font-sans antialiased">
+
+    <div class="h-full w-full bg-white/10 backdrop-blur-sm relative">
 
     <div id="app-container" class="h-full w-full relative">
 
@@ -42,7 +77,7 @@
             🏠 Menu
         </button>
 
-        <div id="slide-login" class="h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-indigo-800 p-6 text-white slide-enter">
+        <div id="slide-login" class="h-full flex flex-col items-center justify-center p-6 text-gray-800 slide-enter">
             <div class="max-w-md w-full bg-white text-gray-800 rounded-3xl shadow-2xl p-8 text-center border-t-8 border-yellow-400">
                 <div class="text-6xl mb-4">🎓</div>
                 <h1 class="text-3xl font-black mb-2 text-blue-900">ENGLISH APP</h1>
@@ -55,8 +90,28 @@
             </div>
         </div>
 
-        <div id="slide-menu" class="hidden h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-800 to-blue-600 p-6 text-white slide-enter relative overflow-hidden">
-            <button onclick="openSidebar()" class="absolute top-6 right-6 z-40 bg-white/20 backdrop-blur border border-white/30 p-3 rounded-full hover:bg-white/40 transition shadow-lg"><div class="text-2xl">👤</div></button>
+        <div id="slide-menu" class="hidden h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-blue-700 p-6 text-white slide-enter relative overflow-hidden">
+            
+            <div class="absolute top-10 left-5 text-7xl opacity-30 animasi-float select-none z-0">
+                🇬🇧
+            </div>
+            <div class="absolute bottom-10 right-5 text-8xl opacity-30 animasi-float-slow select-none z-0">
+                📚
+            </div>
+            <div class="absolute top-5 left-1/2 transform -translate-x-1/2 text-5xl opacity-30 animasi-float-reverse select-none z-0">
+                🎓
+            </div>
+            <div class="absolute bottom-20 left-10 text-6xl opacity-30 animasi-float select-none z-0">
+                🌍
+            </div>
+            <div class="absolute top-20 right-10 text-6xl opacity-30 animasi-float-reverse select-none z-0">
+                ✏️
+            </div>
+
+
+            <button onclick="openSidebar()" class="absolute top-6 right-6 z-50 bg-white/20 backdrop-blur border border-white/30 p-3 rounded-full hover:bg-white/40 transition shadow-lg">
+                <div class="text-2xl">👤</div>
+            </button>
 
             <div id="sidebar-overlay" onclick="closeSidebar()" class="hidden absolute inset-0 bg-black/50 z-40 transition-opacity"></div>
             <div id="profile-sidebar" class="hidden absolute top-0 right-0 h-full w-80 bg-white text-gray-800 shadow-2xl z-50 border-l-4 border-yellow-400 flex flex-col transform translate-x-full">
@@ -72,13 +127,13 @@
                 <div class="p-6 border-t border-gray-100"><button onclick="logout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 rounded-xl font-bold transition">🚪 Keluar</button></div>
             </div>
 
-            <div class="text-center mb-6 mt-2">
+            <div class="text-center mb-6 mt-2 relative z-10">
                 <h1 class="text-3xl md:text-5xl font-black text-yellow-400 drop-shadow-md">ENGLISH MASTERY</h1>
                 <p class="text-sm md:text-lg opacity-90 text-blue-100">Modul Interaktif Kelompok 3</p>
                 <div class="mt-2 bg-white/10 px-4 py-1 rounded-full inline-block backdrop-blur border border-white/20 text-xs md:text-sm">Halo, <span id="menu-welcome-name" class="font-bold text-yellow-300">Mahasiswa</span>!</div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl px-4 h-[60vh] overflow-y-auto custom-scrollbar">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl px-4 h-[60vh] overflow-y-auto custom-scrollbar relative z-10">
                 
                 <div onclick="goToSlide('slide-bab1-menu')" class="bg-white text-blue-900 p-6 rounded-2xl shadow-xl cursor-pointer hover-card flex flex-col items-center justify-center text-center group min-h-[140px] border-b-4 border-blue-200">
                     <div class="bg-blue-100 group-hover:bg-blue-200 transition p-3 rounded-full text-3xl mb-2">🎯</div>
@@ -1814,33 +1869,86 @@
         </div>
 
         <div id="slide-cont-present" class="hidden h-full flex flex-col bg-white slide-enter overflow-hidden">
+            
             <div class="flex-none p-6 border-b border-gray-100 flex justify-between items-center max-w-3xl mx-auto w-full bg-white z-20">
                 <div class="flex items-center gap-3">
                     <div class="bg-indigo-100 p-2 rounded-full text-2xl">📹</div>
-                    <div><span class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Live Action</span><h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Present Continuous</h2></div>
+                    <div>
+                        <span class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Live Action</span>
+                        <h2 class="text-2xl font-black text-gray-900 leading-none mt-1">Present Continuous</h2>
+                    </div>
                 </div>
                 <button onclick="goToSlide('slide-choice-present-cont')" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 font-bold text-xl">&times;</button>
             </div>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50">
                 <div class="max-w-3xl mx-auto px-6 py-10 space-y-12 text-gray-700 leading-relaxed">
+                    
+                    <div>
+                        <div class="w-full bg-gray-200 h-2 mt-0 rounded-full">
+                            <div class="bg-green-500 h-2 rounded-full transition-all duration-1000" style="width: 80%"></div> 
+                        </div>
+                        <div class="flex justify-between px-1 mt-2 mb-6">
+                            <span class="text-[10px] font-bold text-gray-400">START</span>
+                            <span class="text-[10px] font-bold text-green-600">LEVEL 4 PROGRESS: 80%</span>
+                            <span class="text-[10px] font-bold text-gray-400">FINISH</span>
+                        </div>
+                    </div>
                     <section class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
                         <h3 class="text-xl font-bold text-indigo-900 mb-4 border-l-4 border-indigo-500 pl-3">Konsep "LIVE CCTV"</h3>
-                        <p class="mb-4">Bayangkan kamu sedang melihat kamera CCTV. Apa yang <strong>sedang</strong> dilakukan subjek detik ini juga?</p>
-                        <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-200"><strong class="text-indigo-800 text-lg">Rumus Wajib: To Be + V-ing</strong></div>
-                    </section>
-                    <section>
-                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Rumus Dasar</h3>
-                        <div class="space-y-4">
-                            <div class="bg-white p-4 rounded-xl border-l-4 border-purple-500 shadow-sm"><strong class="text-purple-800 block">1. I (Saya)</strong><p class="font-mono mt-1">I <strong>am</strong> eat<strong>ing</strong>.</p></div>
-                            <div class="bg-white p-4 rounded-xl border-l-4 border-orange-500 shadow-sm"><strong class="text-orange-800 block">2. Tunggal (She/He/It)</strong><p class="font-mono mt-1">She <strong>is</strong> sleep<strong>ing</strong>.</p></div>
-                            <div class="bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm"><strong class="text-green-800 block">3. Jamak (You/We/They)</strong><p class="font-mono mt-1">They <strong>are</strong> play<strong>ing</strong>.</p></div>
+                        <p class="mb-4">Bayangkan kamu sedang melihat kamera CCTV. Apa yang <strong>sedang</strong> dilakukan subjek detik ini juga? Itulah Present Continuous.</p>
+                        <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-200">
+                            <strong class="text-indigo-800 text-lg">Rumus Wajib: To Be + V-ing</strong>
+                            <p class="text-sm text-gray-600 mt-1">Jangan pernah pisahkan To Be dan Verb-ing!</p>
                         </div>
                     </section>
+
+                    <section>
+                         <div class="my-6 rounded-2xl overflow-hidden shadow-lg border-4 border-indigo-100">
+                            <iframe class="w-full aspect-video" 
+                                src="https://www.youtube.com/embed/oBbJTEkS9fQ" 
+                                title="YouTube video player" frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p class="text-xs text-center text-gray-400 mt-2">Tonton video di atas agar lebih paham penggunaan V-ing.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Rumus Dasar</h3>
+                        <div class="text-center mb-8">
+                            <span class="bg-white px-6 py-4 rounded-xl shadow-lg border-2 border-indigo-200 font-black text-xl tracking-wide text-indigo-600">
+                                S + (Is/Am/Are) + Verb-ing
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                                <strong class="text-purple-800 block">1. Untuk "I" (Saya)</strong>
+                                <p class="font-mono mt-1">I <strong>am</strong> eat<strong>ing</strong>.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                                <strong class="text-orange-800 block">2. Untuk Tunggal (She/He/It)</strong>
+                                <p class="font-mono mt-1">She <strong>is</strong> sleep<strong>ing</strong>.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
+                                <strong class="text-green-800 block">3. Untuk Jamak (You/We/They)</strong>
+                                <p class="font-mono mt-1">They <strong>are</strong> play<strong>ing</strong>.</p>
+                            </div>
+                        </div>
+                    </section>
+
                     <section class="bg-yellow-50 p-6 rounded-3xl border border-yellow-100">
                         <h3 class="font-bold text-yellow-900 text-lg mb-2">⏳ Penanda Waktu (Sekarang!)</h3>
-                        <div class="flex flex-wrap gap-2 font-bold text-yellow-900"><span class="bg-white px-3 py-1 rounded shadow-sm">Now</span><span class="bg-white px-3 py-1 rounded shadow-sm">Right now</span><span class="bg-white px-3 py-1 rounded shadow-sm">At the moment</span></div>
+                        <p class="text-sm text-yellow-800 mb-4">Kata kunci yang sering muncul:</p>
+                        <div class="flex flex-wrap gap-2 font-bold text-yellow-900">
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Now</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Right now</span>
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">At the moment</span>
+                        </div>
                     </section>
+                    
                     <div class="h-10"></div>
                 </div>
             </div>
@@ -1896,7 +2004,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
     <script>
@@ -2021,6 +2129,7 @@
             }
         };
     </script>
+    </div>
+    </div>
 </body>
-
 </html>
