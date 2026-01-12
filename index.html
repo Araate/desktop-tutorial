@@ -119,10 +119,16 @@
                     <h3 class="font-bold text-lg text-blue-900">Identitas Saya</h3>
                     <button onclick="closeSidebar()" class="text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
                 </div>
+
                 <div class="p-8 flex-1 flex flex-col items-center text-center">
                     <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-5xl mb-6 shadow-lg text-white border-4 border-white">🎓</div>
                     <h2 id="sidebar-nama" class="text-xl font-black text-gray-800 break-words">...</h2>
                     <p id="sidebar-nim" class="text-lg font-mono font-bold text-blue-600">...</p>
+                </div>
+                <div>
+                    <button onclick="toggleMusic()" id="btn-music-sidebar" class="w-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 border border-yellow-200">
+                        <span>🔇</span> Play Music
+                    </button>
                 </div>
                 <div class="p-6 border-t border-gray-100"><button onclick="logout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 rounded-xl font-bold transition">🚪 Keluar</button></div>
             </div>
@@ -3764,6 +3770,28 @@
     </script>
     </div>
     </div>
+
+    <audio id="bg-music" loop>
+    <source src="https://youtu.be/RogITE1plk0?si=U5hsoEkDWqu65DqP" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('btn-music-sidebar');
+            
+            if (music.paused) {
+                music.play();
+                btn.innerHTML = "<span>🎵</span> Stop Music"; 
+                btn.className = "w-full bg-green-100 hover:bg-green-200 text-green-800 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 border border-green-200";
+            } else {
+                music.pause();
+                btn.innerHTML = "<span>🔇</span> Play Music"; 
+                btn.className = "w-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 border border-yellow-200";
+            }
+        }
+    </script>
+
 </body>
 </html>
 
